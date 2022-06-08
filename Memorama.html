@@ -1,0 +1,209 @@
+<!DOCTYPE html><html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <title>Memorama</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style type="text/css">
+<!--
+body {
+	background-image: url(Momo.jpg);
+	background-repeat: repeat;
+}
+-->
+</style></head>
+
+<body>
+
+    <!-- CSS -->
+    <!-- efectos visuales -->
+    <style>
+        :root {
+            --w: calc(70vw / 6);
+            --h: calc(70vh / 4);
+        }
+
+        * {
+            transition: all 0.5s;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            -webkit-perspective: 1000;
+            background: rgb(0, 0, 0);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: calibri;
+        }
+
+        div {
+            display: inline-block;
+        }
+
+        .area-tarjeta,
+        .tarjeta,
+        .cara {
+            cursor: pointer;
+            width: var(--w);
+            min-width: 100px;
+            height: var(--h);
+        }
+
+        .tarjeta {
+            position: relative;
+            transform-style: preserve-3d;
+            animation: iniciar 5s;
+        }
+
+        .cara {
+            position: absolute;
+            backface-visibility: hidden;
+            box-shadow: inset 0 0 0 5px white;
+            font-size: 500%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .trasera {
+            background-color: rgb(255, 255, 255);
+            transform: rotateY(180deg);
+        }
+
+        .superior {
+            background: linear-gradient(rgb(0, 0, 0), rgb(255, 255, 255));
+        }
+
+        .nuevo-juego {
+            cursor: pointer;
+            background: linear-gradient(rgb(255, 255, 255), rgb(255, 255, 255));
+            padding: 20px;
+            border-radius: 50px;
+            border: rgb(129, 129, 129) 5px solid;
+            font-size: 130%;
+        }
+
+        @keyframes iniciar {
+
+            20%,
+            90% {
+                transform: rotateY(180deg);
+            }
+
+            0%,
+            100% {
+                transform: rotateY(0deg);
+            }
+        }
+    </style>
+
+    <!-- HTML -->
+    <!-- estructura visual -->
+
+    <div id="tablero">
+    </div>
+
+    <br>
+
+    <div class="nuevo-juego" onClick="generarTablero()">
+        New Game
+    </div>
+
+    <!-- JS -->
+    <!-- parte lógica -->
+    <script>
+
+        let iconos = []
+        let selecciones = []
+
+        generarTablero()
+
+        function cargarIconos() {
+            iconos = [
+                '<i class="fab fa-android"></i>',
+                '<i class="fab fa-apple"></i>',
+                '<i class="fab fa-bluetooth"></i>',
+                '<i class="fab fa-edge"></i>',
+                '<i class="fab fa-google-drive"></i>',
+                '<i class="fab fa-windows"></i>',
+                '<i class="fab fa-wikipedia-w"></i>',
+                '<i class="fab fa-spotify"></i>',
+                '<i class="fab fa-google-play"></i>',
+                '<i class="fab fa-linux"></i>',
+                '<i class="fab fa-paypal"></i>',
+                '<i class="fab fa-php"></i>',
+            ]
+        }
+
+        function generarTablero() {
+            cargarIconos()
+            selecciones = []
+            let tablero = document.getElementById("tablero")
+            let tarjetas = []
+            for (let i = 0; i < 24; i++) {
+                tarjetas.push(`
+                <div class="area-tarjeta" onclick="seleccionarTarjeta(${i})">
+                    <div class="tarjeta" id="tarjeta${i}">
+                        <div class="cara trasera" id="trasera${i}">
+                            ${iconos[0]}
+                        </div>
+                        <div class="cara superior">
+                            <i class="far fa-question-circle"></i>
+                        </div>
+                    </div>
+                </div>        
+                `)
+                if (i % 2 == 1) {
+                    iconos.splice(0, 1)
+                }
+            }
+            tarjetas.sort(() => Math.random() - 0.5)
+            tablero.innerHTML = tarjetas.join(" ")
+        }
+
+        function seleccionarTarjeta(i) {
+            let tarjeta = document.getElementById("tarjeta" + i)
+            if (tarjeta.style.transform != "rotateY(180deg)") {
+                tarjeta.style.transform = "rotateY(180deg)"
+                selecciones.push(i)
+            }
+            if (selecciones.length == 2) {
+                deseleccionar(selecciones)
+                selecciones = []
+            }
+        }
+
+        function deseleccionar(selecciones) {
+            setTimeout(() => {
+                let trasera1 = document.getElementById("trasera" + selecciones[0])
+                let trasera2 = document.getElementById("trasera" + selecciones[1])
+                if (trasera1.innerHTML != trasera2.innerHTML) {
+                    let tarjeta1 = document.getElementById("tarjeta" + selecciones[0])
+                    let tarjeta2 = document.getElementById("tarjeta" + selecciones[1])
+                    tarjeta1.style.transform = "rotateY(0deg)"
+                    tarjeta2.style.transform = "rotateY(0deg)"
+                }else{
+                    trasera1.style.background = "plum"
+                    trasera2.style.background = "plum"
+                }
+            }, 1000);
+        }
+</script>
+</div>
+        <div align="center">
+          <div align="center">
+            <p>
+      </p>
+        <a href="SubMenu2.html"><img src="Return.png" width="118" height="50"></a>
+        <a href="Menu.html"> <img src="Menu.png" width="118" height="50"></a></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
